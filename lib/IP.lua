@@ -7,8 +7,11 @@ local Delta = ...
 local IP = {}
 
 function IP.new(input)
-	prefix, suffix = input:match("([^/]+)/([^/]+)")
-	print(prefix, " ", suffix)
+	assert(type(input) == "string")
+	local prefix, suffix = input:match("([^/]+)/([^/]+)")
+	local prefixes = prefix
 end
 
 Delta.IP = IP
+
+return IP

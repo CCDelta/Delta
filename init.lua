@@ -15,6 +15,4 @@ Delta.IP = dofile(path.."/lib/IP.lua", Delta)
 --Delta.DH = dofile(path.."/lib/DH.lua", Tunnel)
 --Delta.SHA = dofile(path.."/lib/SHA.lua", Tunnel)
 
-print(Tunnel.AES)
-
-return Tunnel --wow
+return Delta --wow

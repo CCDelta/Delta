@@ -1,6 +1,8 @@
 local path = ...
 
-local Tunnel = {}
+print(path)
+
+local Delta = {}
 
 dofile = function(path,...)
 	local f = loadfile(path)
@@ -8,10 +10,10 @@ dofile = function(path,...)
 	return f(...)
 end
 
-Tunnel.AES = dofile(path.."/lib/AES.lua", Tunnel)
-Tunnel.BigNum = dofile(path.."/lib/BigNum.lua", Tunnel)
-Tunnel.DH = dofile(path.."/lib/DH.lua", Tunnel)
-Tunnel.SHA = dofile(path.."/lib/SHA.lua", Tunnel)
+Delta.IP = dofile(path.."/lib/IP.lua", Delta)
+--Delta.BigNum = dofile(path.."/lib/BigNum.lua", Tunnel)
+--Delta.DH = dofile(path.."/lib/DH.lua", Tunnel)
+--Delta.SHA = dofile(path.."/lib/SHA.lua", Tunnel)
 
 print(Tunnel.AES)
 

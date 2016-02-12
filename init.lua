@@ -10,9 +10,7 @@ dofile = function(path,...)
 	return f(...)
 end
 
+Delta.Utils = dofile(path.."/lib/Utils.lua", Delta)
 Delta.IP = dofile(path.."/lib/IP.lua", Delta)
---Delta.BigNum = dofile(path.."/lib/BigNum.lua", Tunnel)
---Delta.DH = dofile(path.."/lib/DH.lua", Tunnel)
---Delta.SHA = dofile(path.."/lib/SHA.lua", Tunnel)
 
 return Delta --wow

@@ -25,11 +25,13 @@ local function loadFolder(fpath,t)
 	end
 end
 
+local function loadDevice(name)
+	
+end
+
 Delta.loadFolder = loadFolder
 Delta.lib = {}
 
 loadFolder(path.."/lib",Delta.lib)
-
-print(Delta.lib.Utils)
 
 return Delta

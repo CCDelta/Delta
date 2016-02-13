@@ -4,10 +4,7 @@
 
 local Delta = ...
 local SHA = Delta.lib.SHA
-local BigNum = Delta.lib.BigNum
 local toBase = Delta.lib.Utils.toBase
-local bxor = bit.bxor
-local largest = BigNum.new("281474976710597")
 
 local sides = {
 	top 	= 0,
@@ -18,17 +15,17 @@ local sides = {
 	back 	= 5,
 }
 
-return function(side)
+return function(side,channel)
 	if not peripheral.getType(side) == "modem" then
 		return false, "No peripheral present on this side!"
 	end
 	local m = peripheral.wrap(side)
 	local id = os.getComputerID()*6 + sides[side]
-	local s = SHA.sha256(tostring(id))
-	local _1 = tonumber("0x"..s:sub(1,16))
-	local _2 = tonumber("0x"..s:sub(17,32))
-	local _3 = tonumber("0x"..s:sub(33,48))
-	local _4 = tonumber("0x"..s:sub(49,64))
-	local _64bit = tostring(bxor(bxor(_1,_2),bxor(_3,_4)))
-	print(_64bit)
+	m.MAC = toBase(id,2,48)
+	function m.send(destination,msg)
+
+	end
+	function m.connect()
+
+	end
 end

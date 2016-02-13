@@ -34,6 +34,6 @@ Delta.lib = {}
 
 loadFolder(path.."/lib",Delta.lib)
 
-Delta.mac = dofile(path.."Layers/Physical/Modem.lua",Delta)
+Delta.modem = dofile(path.."Layers/Physical/Modem.lua",Delta)
 
 return Delta

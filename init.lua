@@ -1,6 +1,6 @@
 local path = ...
 
-print(path)
+path = path.."/"
 
 local Delta = {}
 
@@ -13,8 +13,23 @@ dofile = function(path,...)
 	return f(...)
 end
 
-local function loadFolder()
-
+local function loadFolder(fpath,t)
+	local totalpath = fpath.."/"
+	for i,v in pairs(fs.list(totalpath)) do
+		if fs.isDir(totalpath..v) then
+			t[v] = {}
+			loadFolder(totalpath..v,t[v])
+		else
+			t[v:match("(%a+)")] = dofile(totalpath..v)
+		end
+	end
 end
+
+Delta.loadFolder = loadFolder
+Delta.lib = {}
+
+loadFolder(path.."/lib",Delta.lib)
+
+print(Delta.lib.Utils)
 
 return Delta

@@ -49,9 +49,13 @@ IP.reserved = {
 }
 
 function IP.isReserved(address)
+	local b = address.binary
+	local l
 	for i=0,15 do
-		print(IP.reserved[i].network)
-		print(IP.reserved[i].length)
+		l = IP.reserved[i]
+		if b:sub(1,l.length)==l.network then
+			return i
+		end
 	end
 end
 

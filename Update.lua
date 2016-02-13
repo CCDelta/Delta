@@ -5,7 +5,7 @@
 local path = ...
 print(path)
 
-local handle = http.get("https://raw.githubusercontent.com/Creator/Tunnel/master/Releases/latest.lua")
+local handle = http.get("https://raw.githubusercontent.com/ccTCP/Delta/master/Releases/latest.lua")
 local f = loadstring(handle.readAll())
 setfenv(f,_G)
 f(path)

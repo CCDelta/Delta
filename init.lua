@@ -13,7 +13,8 @@ dofile = function(path,...)
 	return f(...)
 end
 
-Delta.Utils, err = dofile(path.."/lib/Utils.lua", Delta)
-Delta.IP, err = dofile(path.."/lib/IP.lua", Delta)
+local function loadFolder()
+
+end
 
 return Delta

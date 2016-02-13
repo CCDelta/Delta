@@ -1,5 +1,5 @@
-local Tunnel = ...
-local BigNum = Tunnel.BigNum
+local Delta = ...
+local BigNum = Delta.BigNum
 local doDebug
 
 local round = function(n)

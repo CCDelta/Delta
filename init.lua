@@ -20,7 +20,7 @@ local function loadFolder(fpath,t)
 			t[v] = {}
 			loadFolder(totalpath..v,t[v])
 		else
-			t[v:match("(%a+)")] = dofile(totalpath..v)
+			t[v:match("(%a+)")] = dofile(totalpath..v,Delta)
 		end
 	end
 end
@@ -33,5 +33,7 @@ Delta.loadFolder = loadFolder
 Delta.lib = {}
 
 loadFolder(path.."/lib",Delta.lib)
+
+Delta.mac = dofile(path.."Layers/Physical/Modem.lua",Delta)
 
 return Delta

@@ -48,11 +48,12 @@ return function(side,channel)
 		if not res then
 			return false, err
 		end
-		m.transmit(m.channel,0,{
+		m.transmit(CHANNEL,0,{
 			sender = MAC,
 			destination = destination,
 			msg = msg
 		})
+		return true
 	end
 
 	function m.receive()

@@ -45,7 +45,7 @@ IP.reserved = {
 	[12] = IP.new("203.0.113.0/24"), 	--0xc		TEST-NET-3, documentation and examples 	RFC 5737
 	[13] = IP.new("224.0.0.0/4"), 		--0xd		IP multicast (former Class D network) 	RFC 5771
 	[14] = IP.new("240.0.0.0/4"), 		--0xe		Reserved (former Class E network) 	RFC 1700
-	[15] = IP.new("255.255.255.255/32"), 	--0xf		Broadcast	RFC 919
+	[15] = IP.new("255.255.255.255/32")	--0xf		Broadcast	RFC 919
 }
 
 function IP.isReserved(address)

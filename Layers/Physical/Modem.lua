@@ -7,7 +7,7 @@ local SHA = Delta.lib.SHA
 local toBase = Delta.lib.Utils.toBase
 local CHANNEL = 127
 
-local function checkMAC(macaddress)
+--[[local function checkMAC(macaddress)
 	if type(macaddress) ~= "string" then
 		return false, "MAC address is no string."
 	end
@@ -27,7 +27,7 @@ local sides = {
 	left 	= 3,
 	front 	= 4,
 	back 	= 5,
-}
+}]]--
 
 return function(side,channel)
 	if not peripheral.getType(side) == "modem" then
@@ -49,7 +49,7 @@ return function(side,channel)
 			return false, err
 		end
 		m.transmit(CHANNEL,0,{
-			sender = MAC,
+			sender = IPaddress,
 			destination = destination,
 			msg = msg
 		})

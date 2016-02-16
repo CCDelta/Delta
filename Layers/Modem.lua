@@ -7,7 +7,7 @@ local SHA = Delta.lib.SHA
 local toBase = Delta.lib.Utils.toBase
 local CHANNEL = 127
 
---[[local function checkMAC(macaddress)
+local function checkMAC(macaddress)
 	if type(macaddress) ~= "string" then
 		return false, "MAC address is no string."
 	end
@@ -27,17 +27,40 @@ local sides = {
 	left 	= 3,
 	front 	= 4,
 	back 	= 5,
-}]]--
+}
 
-return function(side,channel)
-	if not peripheral.getType(side) == "modem" then
+--[[CODES
+	0x0 IP_REQUEST
+	0x1 IP_RESPONSE
+]]--
+
+
+
+local function getIP(m, side, mac)
+	m.open(65534)
+	m.transmit(65535,0x0,
+	local event = {}
+	repeat
+		event = {os.pullEvent()}
+	until event[1] == "modem_message" and event[2] == side and event[3] == 655354 and event[5] == mac
+
+end
+
+return function(SIDE)
+	--Peripheral
+	if not peripheral.getType(SIDE) == "modem" then
 		return false, "No peripheral present on this side!"
 	end
-	local m = peripheral.wrap(side)
-	local id = os.getComputerID()*6 + sides[side]
+	local m = peripheral.wrap(SIDE)
+
+	--MAC
+	local id = os.getComputerID()*6 + sides[SIDE]
 	m.MAC = toBase(id,16,6)
 	local MAC = m.MAC
-	local SIDE = side
+
+	--IP
+	local IP = getIP(m, SIDE, MAC)
+	m.IP = IP
 
 	--Code starts here
 	m.open(CHANNEL)
@@ -61,7 +84,7 @@ return function(side,channel)
 		if event[1] ~= "modem_message" then
 			return false, event
 		end
-		if event[2] ~= SIDE then
+		if event[2] ~= side then
 			return false, event
 		end
 		if event[3] ~= CHANNEL then

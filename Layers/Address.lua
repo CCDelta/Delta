@@ -8,6 +8,10 @@ local IP = {}
 
 function IP.new(input)
 	assert(type(input) == "string")
+	if #input == 8 and tonumber("0x"..input) then
+		print(input)
+		input = tostring(tonumber(input:sub(1,2),16)).."."tostring(tonumber(input:sub(3,4),16)).."."tostring(tonumber(input:sub(5,6),16)).."."tostring(tonumber(input:sub(7,8),16))
+		print(input)
 	local address, length = input:match("([^/]+)/([^/]+)")
 	address = input:find("/") and address or input
 	local one, two, three, four = address:match("([^%.]+)%.([^%.]+)%.([^%.]+)%.([^%.]+)")

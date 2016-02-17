@@ -26,10 +26,16 @@ local function loadFolder(fpath,t)
 end
 
 local function loadDevice(name)
-	
+	if fs.exists(path.."Devices/"..name.."/init.lua") then
+		return dofile(path.."Devices/"..name.."/init.lua",path.."Devices/"..name.."/",Delta)
+	else
+		print("Non existent")
+		return false
+	end
 end
 
 Delta.loadFolder = loadFolder
+Delta.loadDevice = loadDevice
 Delta.lib = {}
 
 loadFolder(path.."/lib",Delta.lib)

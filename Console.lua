@@ -67,6 +67,14 @@ local commands = {
 				print("Message: ",msg)
 			end
 		end
+	end,
+	start = function(a)
+		local dev = Delta.loadDevice(a[1])
+		if not dev then
+			print("Fail")
+			return false
+		end
+		dev.run()
 	end
 }
 
@@ -75,6 +83,7 @@ while continue do
 	local r = read(nil,history)
 	table.insert(history,r)
 	c, b = split(r)
+	c = c:lower()
 	if commands[c] then
 		commands[c](b)
 	else

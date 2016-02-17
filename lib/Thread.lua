@@ -2,11 +2,13 @@
 	Thread library
 ]]--
 
-local function thread(func, ...)
+local thread = {}
+
+function thread.new(func, ...)
 	--Private
 	local process = coroutine.create(func)
 	local filter = nil
-	local first
+	local first, ok, err
 
 	--Public
 	local self = {}
@@ -14,8 +16,25 @@ local function thread(func, ...)
 	self.resume = function(...)
 		first = ...
 		if filter == nil or first == filter then
-			coroutine.resume(process,...)
+			ok, err = coroutine.resume(process,...)
+			if ok then
+				filter = err
+			else
+				return err
+			end
 		end
 	end
-
 end
+
+function thread.run(t)
+	local event = {}
+	while true do
+		event = {os.pullEvent()}
+		print(event[1])
+		for i,v in pairs(t) do
+			v.resume(unpack(event))
+		end
+	end
+end
+
+return thread

@@ -32,6 +32,7 @@ local sides = {
 --[[CODES
 	0x0 IP_REQUEST
 	0x1 IP_RESPONSE
+	0x2 IP_DISCONNECT
 ]]--
 
 
@@ -43,7 +44,7 @@ local function getIP(m, side, mac)
 	repeat
 		event = {os.pullEvent()}
 	until event[1] == "modem_message" and event[2] == side and event[3] == 655354 and event[5] == mac
-
+	return event[4]
 end
 
 return function(SIDE)

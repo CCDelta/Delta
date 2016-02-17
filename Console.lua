@@ -6,7 +6,7 @@ end
 
 local path = ...
 
-local Delta = dofile("disk/Delta/init.lua",path)
+local Delta = dofile("disk/Delta/init.lua","disk/Delta")
 
 local m = Delta.modem("top")
 

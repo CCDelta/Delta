@@ -38,8 +38,9 @@ Delta.loadFolder = loadFolder
 Delta.loadDevice = loadDevice
 Delta.lib = {}
 
-loadFolder(path.."/lib",Delta.lib)
+Delta.lib.Utils = dofile(path.."lib/Utils.lua", Delta)
+loadFolder(path.."lib",Delta.lib)
 
-Delta.modem = dofile(path.."Layers/Physical/Modem.lua",Delta)
+Delta.modem = dofile(path.."Framework/Modem.lua",Delta)
 
 return Delta

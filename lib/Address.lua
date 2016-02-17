@@ -10,12 +10,13 @@ function IP.new(input)
 	assert(type(input) == "string")
 	if #input == 8 and tonumber("0x"..input) then
 		print(input)
-		input = tostring(tonumber(input:sub(1,2),16)).."."tostring(tonumber(input:sub(3,4),16)).."."tostring(tonumber(input:sub(5,6),16)).."."tostring(tonumber(input:sub(7,8),16))
+		input = tostring(tonumber(input:sub(1,2),16)).."."..tostring(tonumber(input:sub(3,4),16)).."."..tostring(tonumber(input:sub(5,6),16)).."."..tostring(tonumber(input:sub(7,8),16))
 		print(input)
+	end
 	local address, length = input:match("([^/]+)/([^/]+)")
 	address = input:find("/") and address or input
 	local one, two, three, four = address:match("([^%.]+)%.([^%.]+)%.([^%.]+)%.([^%.]+)")
-	local binary = Delta.Utils.toBase(tonumber(one),2,8)..Delta.Utils.toBase(tonumber(two),2,8)..Delta.Utils.toBase(tonumber(three),2,8)..Delta.Utils.toBase(tonumber(four),2,8)
+	local binary = Delta.lib.Utils.toBase(tonumber(one),2,8)..Delta.lib.Utils.toBase(tonumber(two),2,8)..Delta.lib.Utils.toBase(tonumber(three),2,8)..Delta.lib.Utils.toBase(tonumber(four),2,8)
 	local network, host
 	if length then
 		network, host = binary:sub(1,length), binary:sub(length+1,-1)

@@ -75,6 +75,9 @@ local commands = {
 			return false
 		end
 		dev.run()
+	end,
+	connect = function()
+		m.connect()
 	end
 }
 

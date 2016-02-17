@@ -39,11 +39,12 @@ local sides = {
 
 local function getIP(m, side, mac)
 	m.open(65534)
-	m.transmit(65535,0x0,
+	m.transmit(65535,0x0,mac)
 	local event = {}
 	repeat
 		event = {os.pullEvent()}
 	until event[1] == "modem_message" and event[2] == side and event[3] == 655354 and event[5] == mac
+	m.close(65534)
 	return event[4]
 end
 
@@ -60,8 +61,7 @@ return function(SIDE)
 	local MAC = m.MAC
 
 	--IP
-	local IP = getIP(m, SIDE, MAC)
-	m.IP = IP
+	local IP
 
 	--Code starts here
 	m.open(CHANNEL)
@@ -98,6 +98,11 @@ return function(SIDE)
 			return false, event
 		end
 		return sender, destination, msg
+	end
+
+	function m.connect()
+		IP = getIP(m, SIDE, MAC)
+		m.IP = IP
 	end
 
 	return m

@@ -15,6 +15,7 @@ function thread.new(func, ...)
 
 	self.resume = function(...)
 		first = ...
+		print("Resuming")
 		if filter == nil or first == filter then
 			ok, err = coroutine.resume(process,...)
 			if ok then
@@ -24,6 +25,8 @@ function thread.new(func, ...)
 			end
 		end
 	end
+
+	return self
 end
 
 function thread.run(t)

@@ -88,7 +88,10 @@ while continue do
 	c, b = split(r)
 	c = c:lower()
 	if commands[c] then
-		commands[c](b)
+		ok, err = pcall(commands[c],b)
+		if not ok then
+			print(err)
+		end
 	else
 		print("No such command!")
 	end

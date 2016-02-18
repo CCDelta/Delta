@@ -10,6 +10,12 @@ function thread.new(func, ...)
 	local filter = nil
 	local first, ok, err
 
+	ok, err = coroutine.resume(process,...)
+	if ok then
+		filter = err
+		print(err)
+	end
+
 	--Public
 	local self = {}
 
@@ -17,6 +23,7 @@ function thread.new(func, ...)
 		first = ...
 		print("Resuming")
 		if filter == nil or first == filter then
+			print("Resuming more...")
 			ok, err = coroutine.resume(process,...)
 			if ok then
 				filter = err
@@ -35,6 +42,7 @@ function thread.run(t)
 		event = {os.pullEvent()}
 		print(event[1])
 		for i,v in pairs(t) do
+			print(i)
 			v.resume(unpack(event))
 		end
 	end

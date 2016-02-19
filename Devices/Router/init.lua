@@ -5,6 +5,8 @@ local Router = {}
 local Services = {}
 local Processes = {}
 
+m = Delta.modem("top")
+
 Services.DHCP = Thread.new(Delta.dofile(path.."DHCP.lua", Delta), m)
 Services.test = Thread.new((function(j) print(j) os.pullEvent() end),"lelssss")
 

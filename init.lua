@@ -25,9 +25,9 @@ local function loadFolder(fpath,t)
 	end
 end
 
-local function loadDevice(name)
+local function loadDevice(name, ...)
 	if fs.exists(path.."Devices/"..name.."/init.lua") then
-		return dofile(path.."Devices/"..name.."/init.lua",path.."Devices/"..name.."/",Delta)
+		return dofile(path.."Devices/"..name.."/init.lua",path.."Devices/"..name.."/", Delta, ...)
 	else
 		print("Non existent")
 		return false

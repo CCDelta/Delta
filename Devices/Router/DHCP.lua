@@ -17,7 +17,8 @@ local function DHCP(m)
 	while true do
 		event = {coroutine.yield("modem_message")}
 		if event[3] == 1024 and event[4] == 0x0 then
-			m.transmit(1024,0x0,{
+			print("Answering request...")
+			m.transmit(1023,0x1,{
 				[1] = event[5],
 				[2] = base..tostring(moreSig).."."..tostring(lessSig)
 			})

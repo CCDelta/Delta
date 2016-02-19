@@ -47,7 +47,6 @@ local function getIP(m, side, mac)
 		event = {os.pullEvent()}
 	until event[1] == "modem_message" and event[2] == side and event[3] == 1023 and event[4] == 0x1 and type(event[5]) == "table" and event[5][1] == mac
 	m.close(1023)
-	print(event[5][2])
 	return event[5][2]
 end
 

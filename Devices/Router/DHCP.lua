@@ -6,7 +6,7 @@ local Delta = ...
 
 local function DHCP(modem)
 	local event = {}
-	modem.open(65535)
+	modem.open(1024)
 	print("Running")
 
 	while true do

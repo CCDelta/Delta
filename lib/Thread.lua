@@ -21,7 +21,8 @@ function thread.new(func, ...)
 
 	self.resume = function(...)
 		first = ...
-		print("Resuming")
+		print("First: ",first)
+		print("Filter: ",filter)
 		if filter == nil or first == filter then
 			print("Resuming more...")
 			ok, err = coroutine.resume(process,...)

@@ -38,13 +38,13 @@ local sides = {
 
 
 local function getIP(m, side, mac)
-	m.open(65534)
-	m.transmit(65535,0x0,mac)
+	m.open(1023)
+	m.transmit(1024,0x0,mac)
 	local event = {}
 	repeat
 		event = {os.pullEvent()}
-	until event[1] == "modem_message" and event[2] == side and event[3] == 655354 and event[5] == mac
-	m.close(65534)
+	until event[1] == "modem_message" and event[2] == side and event[3] == 1023 and event[5] == mac
+	m.close(1023)
 	return event[4]
 end
 
@@ -54,6 +54,10 @@ return function(SIDE)
 		return false, "No peripheral present on this side!"
 	end
 	local m = peripheral.wrap(SIDE)
+	for i,v in pairs(m) do 
+		print(i)
+	end
+	read()
 
 	--MAC
 	local id = os.getComputerID()*6 + sides[SIDE]
@@ -104,6 +108,11 @@ return function(SIDE)
 		IP = getIP(m, SIDE, MAC)
 		m.IP = IP
 	end
+
+	for i,v in pairs(m) do 
+		print(i)
+	end
+	read()
 
 	return m
 end

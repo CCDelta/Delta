@@ -78,6 +78,18 @@ local commands = {
 	end,
 	connect = function()
 		m.connect()
+	end,
+	reload = function()
+		Delta = nil
+		m = nil
+
+		Delta = dofile("disk/Delta/init.lua","disk/Delta")
+		m = Delta.modem("top")
+	end,
+	set = function(a)
+		if type(a[1]) == "string" and a[1]:lower() == "modem" then
+			m = Delta.modem(a[2])
+		end
 	end
 }
 

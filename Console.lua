@@ -11,7 +11,7 @@ print(dofile)
 
 local path = ...
 
-local Delta = dofile("disk/Delta/init.lua","disk/Delta")
+local Delta = dofile(path.."/init.lua",path)
 
 local m = Delta.modem("top")
 
@@ -88,7 +88,7 @@ local commands = {
 		Delta = nil
 		m = nil
 
-		Delta = dofile("disk/Delta/init.lua","disk/Delta")
+		Delta = dofile(path.."/init.lua",path)
 		m = Delta.modem("top")
 	end,
 	set = function(a)

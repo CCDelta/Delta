@@ -48,16 +48,12 @@ local function getIP(m, side, mac)
 	return event[4]
 end
 
-return function(SIDE)
+local v = function(SIDE)
 	--Peripheral
 	if not peripheral.getType(SIDE) == "modem" then
 		return false, "No peripheral present on this side!"
 	end
 	local m = peripheral.wrap(SIDE)
-	for i,v in pairs(m) do 
-		print(i)
-	end
-	read()
 
 	--MAC
 	local id = os.getComputerID()*6 + sides[SIDE]
@@ -109,10 +105,7 @@ return function(SIDE)
 		m.IP = IP
 	end
 
-	for i,v in pairs(m) do 
-		print(i)
-	end
-	read()
-
 	return m
 end
+
+return v

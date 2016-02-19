@@ -3,10 +3,14 @@
 ]]--
 
 local Delta = ...
+print(type(Delta), " <== Delta")
 
-local function DHCP(modem)
+local function DHCP(m)
 	local event = {}
-	modem.open(1024)
+	print("Starting DHCP...")
+	print("m: ", m)
+	m.open(1024)
+	print(m.isOpen(1024))
 	print("Running")
 
 	while true do

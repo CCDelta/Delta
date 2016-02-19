@@ -36,6 +36,7 @@ end
 
 Delta.loadFolder = loadFolder
 Delta.loadDevice = loadDevice
+Delta.dofile = dofile
 Delta.lib = {}
 
 Delta.lib.Utils = dofile(path.."lib/Utils.lua", Delta)

@@ -30,9 +30,11 @@ local sides = {
 }
 
 --[[CODES
-	0x0 IP_REQUEST
-	0x1 IP_RESPONSE
-	0x2 IP_DISCONNECT
+	0x0 DHCP_REQUEST
+	0x1 DHCP_RESPONSE
+	0x2 DHCP_DISCONNECT
+	0x3 DHCP_DISCONNECT_CONFIRM
+	0x4 IP_PACKET
 ]]--
 
 
@@ -43,9 +45,10 @@ local function getIP(m, side, mac)
 	local event = {}
 	repeat
 		event = {os.pullEvent()}
-	until event[1] == "modem_message" and event[2] == side and event[3] == 1023 and event[5] == mac
+	until event[1] == "modem_message" and event[2] == side and event[3] == 1023 and event[4] == 0x1 and type(event[5]) == "table" and event[5][1] == mac
 	m.close(1023)
-	return event[4]
+	print(event[5][2])
+	return event[5][2]
 end
 
 local v = function(SIDE)

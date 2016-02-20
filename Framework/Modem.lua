@@ -29,24 +29,31 @@ local sides = {
 	back 	= 5,
 }
 
---[[CODES
+--[[CHANNELS
+	65535 DHCP REQUESTS
+	65534 DHCP RESPONSES
+	64511 IP PACKETS
+]]--
+
+
+--[[DHCP
 	0x0 DHCP_REQUEST
 	0x1 DHCP_RESPONSE
 	0x2 DHCP_DISCONNECT
 	0x3 DHCP_DISCONNECT_CONFIRM
-	0x4 IP_PACKET
 ]]--
 
 
 
+
 local function getIP(m, side, mac)
-	m.open(1023)
-	m.transmit(1024,0x0,mac)
+	m.open(65534)
+	m.transmit(65535,0x0,mac)
 	local event = {}
 	repeat
 		event = {os.pullEvent()}
-	until event[1] == "modem_message" and event[2] == side and event[3] == 1023 and event[4] == 0x1 and type(event[5]) == "table" and event[5][1] == mac
-	m.close(1023)
+	until event[1] == "modem_message" and event[2] == side and event[3] == 65534 and event[4] == 0x1 and type(event[5]) == "table" and event[5][1] == mac
+	m.close(65534)
 	return event[5][2]
 end
 

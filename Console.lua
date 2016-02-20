@@ -83,6 +83,7 @@ local commands = {
 	end,
 	connect = function()
 		m.connect()
+		print(m.IP)
 	end,
 	reload = function()
 		Delta = nil

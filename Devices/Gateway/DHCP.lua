@@ -12,13 +12,13 @@ local function DHCP(m)
 	local moreSig = 0
 
 	local event = {}
-	m.open(1024)
+	m.open(65535)
 
 	while true do
 		event = {coroutine.yield("modem_message")}
-		if event[3] == 1024 and event[4] == 0x0 then
+		if event[3] == 65535 and event[4] == 0x0 then
 			print("Answering request...")
-			m.transmit(1023,0x1,{
+			m.transmit(65534,0x1,{
 				[1] = event[5],
 				[2] = base..tostring(moreSig).."."..tostring(lessSig)
 			})

@@ -1,16 +1,19 @@
-local path, Delta = ...
-local Thread = Delta.lib.Thread
+local path = ...
 
-local Router = {}
-local Services = {}
-local Processes = {}
+print(path)
 
-m = Delta.modem("top")
+local Delta = {}
 
-Services.DHCP = Thread.new(Delta.dofile(path.."DHCP.lua", Delta), m)
-
-function Router.run()
-	Thread.run(Services)
+dofile = function(path,...)
+	local f, err = loadfile(path)
+	if not f then
+		print(err)
+	end
+	setfenv(f,_G)
+	return f(...)
 end
 
-return Router
+Delta.Utils, err = dofile(path.."/lib/Utils.lua", Delta)
+Delta.IP, err = dofile(path.."/lib/IP.lua", Delta)
+
+return Delta

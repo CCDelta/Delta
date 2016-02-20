@@ -29,7 +29,6 @@ local function Switch()
 
 	for i,v in pairs(modems) do
 		istrue = v.connect()
-		print(i, ": ", istrue)
 		if istrue then
 			MainSide = i
 			MainIP = v.IP
@@ -38,8 +37,6 @@ local function Switch()
 		v.open(65534)
 		v.open(64511)
 	end
-
-	print(MainSide)
 
 	for i,v in pairs(modems) do
 		v.setIP(MainIP)
@@ -52,12 +49,11 @@ local function Switch()
 
 	}
 	
-	local side, protocol, req_id, message, s
+	local side, protocol, req_id, message, s_side, d_ip, s_ip
 
 	while true do
 		event = {coroutine.yield("modem_message")}
 		if event[1] == "modem_message" then
-			print("Processing message...")
 			side, protocol, req_id, message = event[2], event[3], event[4], event[5]
 			if protocol == 65535 then
 				if not (side == MainSide) then
@@ -67,10 +63,27 @@ local function Switch()
 				end
 			elseif protocol == 65534 then
 				if side == MainSide then
-					s = macs[message[1]]
-					if s then
-						modems[s].transmit(65534, 0x1, message)
+					s_side = macs[message[1]]
+					if s_side then
+						modems[s_side].transmit(65534, 0x1, message)
+						macs[message[1]] = nil
+						ips[message[2]] = side
 						print("Protocol 65534...")
+					end
+				end
+			elseif protocol == 64511 then
+				d_ip, s_ip message[1], message[2]
+				ips[s_ip] = side
+				s_side = ips[sip]
+				message[6] = message[6] - 1
+				if s_side then
+					modems[s_side].transmit(64511, 0x0, message)
+					print("Protocol 64511...")
+				else
+					for i,v in pairs(modems) do
+						if i ~= side then
+							v.transmit(64511, 0x0, message)
+						end
 					end
 				end
 			end

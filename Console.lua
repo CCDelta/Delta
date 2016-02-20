@@ -52,23 +52,33 @@ local commands = {
 		term.setCursorPos(1,1)
 	end,
 	send = function(a)
-		local ok, err = m.send(a[1],a[2])
-		if not ok then
-			print(err)
-		else
-			print("Everyhting OK.")
-		end
+		local ok, err = modems[main].send(a[1],1024,255,table.concat(a," "):sub(#a[1]+2,-1))
 	end,
 	receive = function()
-		local sender, destination, msg
+		--[[{
+			[1] = Destination IP
+			[2] = Sender IP
+			[3] = Destination Port
+			[4] = Sender Port
+			[5] = Message
+			[6] = TTL
+		}]]--
+
+		local msg
 		while true do
-			sender, destination, msg = m.receive()
-			if not sender then
-				print(destination[1])
+			msg, ev = modems[main].receive()
+			if not msg then
+				print(ev[1])
+				if ev[1] == "terminate" then
+					error("Terminating...")
+				end
 			else
-				print("Sender: ",sender)
-				print("Destination: ",destination)
-				print("Message: ",msg)
+				print("Sender: ", msg[1])
+				print("Destination: ", msg[2])
+				print("Destination Port: ", msg[3])
+				print("Sender Port: ", msg[4])
+				print("Message: ", msg[5])
+				print("TTL: ", msg[6])
 			end
 		end
 	end,

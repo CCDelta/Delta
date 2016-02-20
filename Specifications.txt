@@ -32,5 +32,6 @@ IP_PACKET
 		[3] = Destination Port
 		[4] = Sender Port
 		[5] = Message
+		[6] = TTL
 	}
 

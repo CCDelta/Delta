@@ -8,7 +8,7 @@ dofile = function(path,...)
 end
 
 local modems = {}
-local main
+local main = ""
 
 local path = ...
 
@@ -100,8 +100,8 @@ local commands = {
 	add = function(a)
 		a[1] = tostring(a[1]):lower()
 		modems[a[1]] = Delta.modem(a[1])
-		if main == nil then
-			main = a
+		if main == "" then
+			main = a[1]
 		end
 	end
 }

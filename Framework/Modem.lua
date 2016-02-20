@@ -33,7 +33,7 @@ local function getIP(m, side, mac, timeout)
 	m.open(65534)
 	m.transmit(65535,0x0,mac)
 	local event = {}
-	local timer = os.startTimer(timeout or 0.5)
+	local timer = os.startTimer(timeout or 3)
 	repeat
 		event = {os.pullEvent()}
 	until (event[1] == "modem_message" and event[2] == side and event[3] == 65534 and event[4] == 0x1 and type(event[5]) == "table" and event[5][1] == mac) or (event[1] == "timer" and event[2] == timer)
@@ -63,7 +63,7 @@ local v = function(SIDE)
 
 	--Code starts here
 	m.open(64511)
-	
+
 	function m.send(destination_ip,destination_port,this_port,msg)
 		m.transmit(64511,0,{
 			[1] = destination_ip,

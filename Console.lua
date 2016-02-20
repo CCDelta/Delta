@@ -13,8 +13,6 @@ local path = ...
 
 local Delta = dofile(path.."/init.lua",path)
 
-local m = Delta.modem("top")
-
 local split = function(str)
 	local f = str:find(" ") or #str+1
 	local command = str:sub(1,f-1)
@@ -87,10 +85,7 @@ local commands = {
 	end,
 	reload = function()
 		Delta = nil
-		m = nil
-
 		Delta = dofile(path.."/init.lua",path)
-		m = Delta.modem("top")
 	end,
 	set = function(a)
 		if type(a[1]) == "string" and a[1]:lower() == "modem" then
@@ -98,6 +93,11 @@ local commands = {
 		end
 	end
 }
+
+function commands.clean()
+	pcall(commands.reload,b)
+	pcall(commands.clr,b)
+end
 
 while continue do
 	term.write("> ")

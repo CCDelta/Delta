@@ -46,15 +46,21 @@ local sides = {
 
 
 
-local function getIP(m, side, mac)
+local function getIP(m, side, mac, timeout)
 	m.open(65534)
 	m.transmit(65535,0x0,mac)
 	local event = {}
+	local timer = os.startTimer(timeout or 0.5)
 	repeat
 		event = {os.pullEvent()}
-	until event[1] == "modem_message" and event[2] == side and event[3] == 65534 and event[4] == 0x1 and type(event[5]) == "table" and event[5][1] == mac
+	until (event[1] == "modem_message" and event[2] == side and event[3] == 65534 and event[4] == 0x1 and type(event[5]) == "table" and event[5][1] == mac) or (event[1] == "timer" and event[2] == timer)
+	os.cancelTimer(timer)
 	m.close(65534)
-	return event[5][2]
+	if event[1] == "timer" then
+		return false
+	elseif event[1] == "modem_message" then
+		return event[5][2]
+	end
 end
 
 local v = function(SIDE)
@@ -109,9 +115,10 @@ local v = function(SIDE)
 		return sender, destination, msg
 	end
 
-	function m.connect()
-		IP = getIP(m, SIDE, MAC)
+	function m.connect(timeout)
+		IP = getIP(m, SIDE, MAC, timeout)
 		m.IP = IP
+		if IP then return true else return false end
 	end
 
 	return m

@@ -8,7 +8,6 @@ local function wrap(side)
 	if peripheral.isPresent(side) then
 		if peripheral.getType(side) == "modem" then
 			if peripheral.call(side,"isWireless") == false then
-				print(side)
 				return Delta.modem(side)
 			end
 		end
@@ -26,7 +25,13 @@ local function Switch()
 		left = wrap("left"),
 	}
 
-	
+	for i,v in pairs(modems) do
+		print(v.connect())
+	end
+
+	local ips = {
+
+	}
 	
 	while true do
 		event = {coroutine.yield("modem_message")}

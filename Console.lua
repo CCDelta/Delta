@@ -7,7 +7,8 @@ dofile = function(path,...)
 	return f(...)
 end
 
-print(dofile)
+local modems = {}
+local main
 
 local path = ...
 
@@ -80,16 +81,27 @@ local commands = {
 		dev.run()
 	end,
 	connect = function()
-		m.connect()
-		print(m.IP)
+		modems[main].connect()
+		print(modems[main].IP)
 	end,
 	reload = function()
 		Delta = nil
 		Delta = dofile(path.."/init.lua",path)
 	end,
 	set = function(a)
-		if type(a[1]) == "string" and a[1]:lower() == "modem" then
-			m = Delta.modem(a[2])
+		if type(a[1]) == "string" then
+			if  a[1]:lower() == "modem" then
+				m = Delta.modem(a[2])
+			elseif a[1]:lower() == "main" then
+				main = tostring(a[2])
+			end
+		end
+	end,
+	add = function(a)
+		a[1] = tostring(a[1]):lower()
+		modems[a[1]] = Delta.modem(a[1])
+		if main == nil then
+			main = a
 		end
 	end
 }

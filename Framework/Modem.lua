@@ -62,14 +62,15 @@ local v = function(SIDE)
 	local IP
 
 	--Code starts here
-	m.open(CHANNEL)
-
-
+	m.open(64511)
+	
 	function m.send(destination_ip,destination_port,this_port,msg)
 		m.transmit(64511,0,{
-			sender = IPaddress,
-			destination = destination,
-			msg = msg
+			[1] = destination_ip,
+			[2] = IP,
+			[3] = destination_port,
+			[4] = this_port,
+			[5] = msg,
 		})
 		return true
 	end

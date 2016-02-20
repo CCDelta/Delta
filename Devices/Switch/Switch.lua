@@ -16,6 +16,8 @@ local function wrap(side)
 end
 
 local function Switch()
+	local MainSide
+	local MainIP
 	local modems = {
 		top = wrap("top"),
 		bottom = wrap("bottom"),
@@ -26,8 +28,17 @@ local function Switch()
 	}
 
 	for i,v in pairs(modems) do
-		print(v.connect())
+		if v.connect() then
+			MainSide = i
+			MainIP = v.IP
+		end
 	end
+
+	for i,v in pairs(modems) do
+		v.setIP(MainIP)
+	end
+
+	print(MainSide)
 
 	local ips = {
 

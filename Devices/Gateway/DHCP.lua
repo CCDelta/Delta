@@ -18,6 +18,7 @@ local function DHCP(m)
 		event = {coroutine.yield("modem_message")}
 		if event[3] == 65535 and event[4] == 0x0 then
 			print("Answering request...")
+			print("New IP: ", base..tostring(moreSig).."."..tostring(lessSig))
 			m.transmit(65534,0x1,{
 				[1] = event[5],
 				[2] = base..tostring(moreSig).."."..tostring(lessSig)

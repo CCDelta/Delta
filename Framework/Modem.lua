@@ -5,7 +5,6 @@
 local Delta = ...
 local SHA = Delta.lib.SHA
 local toBase = Delta.lib.Utils.toBase
-local CHANNEL = 127
 
 local function checkMAC(macaddress)
 	if type(macaddress) ~= "string" then
@@ -28,22 +27,6 @@ local sides = {
 	front 	= 4,
 	back 	= 5,
 }
-
---[[CHANNELS
-	65535 DHCP REQUESTS
-	65534 DHCP RESPONSES
-	64511 IP PACKETS
-]]--
-
-
---[[DHCP
-	0x0 DHCP_REQUEST
-	0x1 DHCP_RESPONSE
-	0x2 DHCP_DISCONNECT
-	0x3 DHCP_DISCONNECT_CONFIRM
-]]--
-
-
 
 
 local function getIP(m, side, mac, timeout)
@@ -82,12 +65,8 @@ local v = function(SIDE)
 	m.open(CHANNEL)
 
 
-	function m.send(destination,msg)
-		local res, err = checkMAC(destination)
-		if not res then
-			return false, err
-		end
-		m.transmit(CHANNEL,0,{
+	function m.send(destination_ip,destination_port,this_port,msg)
+		m.transmit(64511,0,{
 			sender = IPaddress,
 			destination = destination,
 			msg = msg
@@ -119,6 +98,12 @@ local v = function(SIDE)
 		IP = getIP(m, SIDE, MAC, timeout)
 		m.IP = IP
 		if IP then return true else return false end
+	end
+
+	function m.setIP(l)
+		IP = l
+		m.IP = l
+		return true
 	end
 
 	return m

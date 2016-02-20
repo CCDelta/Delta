@@ -72,7 +72,7 @@ local function Switch()
 					end
 				end
 			elseif protocol == 64511 then
-				d_ip, s_ip message[1], message[2]
+				d_ip, s_ip = message[1], message[2]
 				ips[s_ip] = side
 				s_side = ips[sip]
 				message[6] = message[6] - 1
@@ -85,6 +85,7 @@ local function Switch()
 							v.transmit(64511, 0x0, message)
 						end
 					end
+					print("Protocol 64511...")
 				end
 			end
 		end

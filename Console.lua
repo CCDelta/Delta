@@ -73,8 +73,8 @@ local commands = {
 					error("Terminating...")
 				end
 			else
-				print("Sender: ", msg[1])
-				print("Destination: ", msg[2])
+				print("Destination: ", msg[1])
+				print("Sender: ", msg[2])
 				print("Destination Port: ", msg[3])
 				print("Sender Port: ", msg[4])
 				print("Message: ", msg[5])

@@ -11,7 +11,8 @@ local escape = {
 	path.."/Releases",
 	path.."/Compress.lua",
 	path.."/README.md",
-	path.."/Build.lua"
+	path.."/Build.lua",
+	path.."/keanny.png",
 
 }
 

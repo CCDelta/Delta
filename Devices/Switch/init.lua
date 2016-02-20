@@ -5,7 +5,7 @@ local Switch = {}
 local Services = {}
 local Processes = {}
 
-Services.DHCP = Thread.new(Delta.dofile(path.."Switch.lua", Delta), m)
+Services.DHCP = Thread.new(Delta.dofile(path.."Switch.lua", Delta))
 
 function Switch.run()
 	Thread.run(Services)

@@ -9,6 +9,7 @@ localInterface = Delta.modem(localSide)
 globalInterface = Delta.modem(globalSide)
 
 Services.DHCP = Thread.new(Delta.dofile(path.."DHCP.lua", Delta), localInterface)
+Services.Gateway = Thread.new(Delta.dofile(path.."Gateway.lua", Delta), localInterface, globalInterface)
 
 function Gateway.run()
 	Thread.run(Services)

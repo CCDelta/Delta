@@ -7,15 +7,22 @@ dofile = function(path,...)
 	return f(...)
 end
 
-if not fs.exists(".path") then
-	print(".path file does not exist...")
+if not fs.exists("path") then
+	print("path file does not exist...")
 	return
 end
 
-local file = fs.open(".path","r")
-local path = file.readAll()
+local file = fs.open("path","r")
+local data = file.readAll()
 file.close()
 
-local Delta = dofile("disk/Delta/init.lua", path)
-local Gateway = Delta.loadDevice("Gateway")
+local datas = {}
+
+for token in data:gmatch("[^\n]+") do
+	print(token)
+	datas[#datas+1] = token
+end
+
+local Delta = dofile("disk/Delta/init.lua", datas[1])
+local Gateway = Delta.loadDevice("Gateway", datas[2], datas[3])
 Gateway.run()

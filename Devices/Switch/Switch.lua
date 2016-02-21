@@ -44,6 +44,7 @@ local function Switch()
 	for i,v in pairs(modems) do
 		v.setIP(MainIP)
 	end
+	print(MainIP)
 
 	local ips = {
 
@@ -79,28 +80,29 @@ local function Switch()
 				ips[s_ip] = side
 				message[6] = message[6] - 1
 
+				--[[Private Network Stuff]]--
 				private_network_ID = nil
-				private_network_ID = IPlib.isReserved(d_ip)
+				private_network_ID = IPlib.isReserved(d_ip, true)
 
 				if private_network_ID then
-					if private_network_ID ~= 9 then
-						return
-					end
-					s_side = ips[sip]
-					if s_side then
-						modems[s_side].transmit(64511, 0x0, message)
-						print("Protocol 64511...")
-					else
-						for i,v in pairs(modems) do
-							if i ~= side then
-								v.transmit(64511, 0x0, message)
+					if private_network_ID == 9 then
+						s_side = ips[sip]
+						if s_side then
+							modems[s_side].transmit(64511, 0x0, message)
+							print("Protocol 64511...")
+						else
+							for i,v in pairs(modems) do
+								if i ~= side then
+									v.transmit(64511, 0x0, message)
+								end
 							end
+							print("Protocol 64511...") --wow
 						end
-						print("Protocol 64511...") --wow
 					end
 				else
 					modems[MainSide].transmit(64511, 0x0, message)
 					print("Protocol 64511...") --wow
+					print("Main side")
 				end
 			end
 		end

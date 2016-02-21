@@ -47,6 +47,10 @@ local function getIP(m, side, mac, timeout)
 end
 
 local v = function(SIDE)
+	if not SIDE then
+		error("SIDE", 2)
+	end
+
 	--Peripheral
 	if not peripheral.getType(SIDE) == "modem" then
 		return false, "No peripheral present on this side!"

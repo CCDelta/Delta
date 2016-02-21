@@ -7,12 +7,12 @@ dofile = function(path,...)
 	return f(...)
 end
 
-if not fs.exists(".path") then
-	print(".path file does not exist...")
+if not fs.exists("path") then
+	print("path file does not exist...")
 	return
 end
 
-local file = fs.open(".path","r")
+local file = fs.open("path","r")
 local path = file.readAll()
 file.close()
 

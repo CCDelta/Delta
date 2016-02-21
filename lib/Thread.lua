@@ -28,6 +28,7 @@ function thread.new(func, ...)
 			if ok then
 				filter = err
 			else
+				print(err)
 				return err
 			end
 		end

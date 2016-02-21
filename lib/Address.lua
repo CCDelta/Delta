@@ -3,8 +3,14 @@
 ]]--
 
 local Delta = ...
+local toBase = Delta.lib.Utils.toBase
 
 local IP = {}
+
+function IP.toBinary(str)
+	local one, two, three, four = str:match("([^%.]+)%.([^%.]+)%.([^%.]+)%.([^%.]+)")
+	return toBase(tonumber(one),2,8)..toBase(tonumber(two),2,8)..toBase(tonumber(three),2,8)..toBase(tonumber(four),2,8)
+end
 
 function IP.new(input)
 	assert(type(input) == "string")
@@ -16,7 +22,7 @@ function IP.new(input)
 	local address, length = input:match("([^/]+)/([^/]+)")
 	address = input:find("/") and address or input
 	local one, two, three, four = address:match("([^%.]+)%.([^%.]+)%.([^%.]+)%.([^%.]+)")
-	local binary = Delta.lib.Utils.toBase(tonumber(one),2,8)..Delta.lib.Utils.toBase(tonumber(two),2,8)..Delta.lib.Utils.toBase(tonumber(three),2,8)..Delta.lib.Utils.toBase(tonumber(four),2,8)
+	local binary = toBase(tonumber(one),2,8)..toBase(tonumber(two),2,8)..toBase(tonumber(three),2,8)..toBase(tonumber(four),2,8)
 	local network, host
 	if length then
 		network, host = binary:sub(1,length), binary:sub(length+1,-1)
@@ -53,8 +59,8 @@ IP.reserved = {
 	[15] = IP.new("255.255.255.255/32")	--0xf		Broadcast	RFC 919
 }
 
-function IP.isReserved(address)
-	local b = address.binary
+function IP.isReserved(address, isString)
+	local b = isString and IP.toBinary(address) or address.binary
 	local l
 	for i=0,15 do
 		l = IP.reserved[i]

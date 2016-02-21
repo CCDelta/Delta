@@ -4,6 +4,8 @@
 
 local Delta = ...
 
+IPlib = Delta.lib.Address
+
 local function wrap(side)
 	if peripheral.isPresent(side) then
 		if peripheral.getType(side) == "modem" then
@@ -18,6 +20,7 @@ end
 local function Switch()
 	local MainSide
 	local MainIP
+	local private_network_ID
 	local modems = {
 		top = wrap("top"),
 		bottom = wrap("bottom"),
@@ -74,17 +77,29 @@ local function Switch()
 			elseif protocol == 64511 then
 				d_ip, s_ip = message[1], message[2]
 				ips[s_ip] = side
-				s_side = ips[sip]
 				message[6] = message[6] - 1
-				if s_side then
-					modems[s_side].transmit(64511, 0x0, message)
-					print("Protocol 64511...")
-				else
-					for i,v in pairs(modems) do
-						if i ~= side then
-							v.transmit(64511, 0x0, message)
-						end
+
+				private_network_ID = nil
+				private_network_ID = IPlib.isReserved(d_ip)
+
+				if private_network_ID then
+					if private_network_ID ~= 9 then
+						return
 					end
+					s_side = ips[sip]
+					if s_side then
+						modems[s_side].transmit(64511, 0x0, message)
+						print("Protocol 64511...")
+					else
+						for i,v in pairs(modems) do
+							if i ~= side then
+								v.transmit(64511, 0x0, message)
+							end
+						end
+						print("Protocol 64511...") --wow
+					end
+				else
+					modems[MainSide].transmit(64511, 0x0, message)
 					print("Protocol 64511...") --wow
 				end
 			end
@@ -92,4 +107,4 @@ local function Switch()
 	end
 end
 
-return Switch
+return Switch 

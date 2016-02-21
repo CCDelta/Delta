@@ -17,5 +17,5 @@ local path = file.readAll()
 file.close()
 
 local Delta = dofile("disk/Delta/init.lua", path)
-local Switch = Delta.loadDevice("Switch")
-Switch.run()
+local Gateway = Delta.loadDevice("Gateway")
+Gateway.run()

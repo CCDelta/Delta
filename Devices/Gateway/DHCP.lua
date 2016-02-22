@@ -5,14 +5,26 @@
 local Delta = ...
 local base = "192.168."
 
-local function DHCP(m)
+local function DHCP(globalSide, ipSide)
 	local ips = {}
 	local nextKey = 0
 	local lessSig = 0
 	local moreSig = 0
 
+	local modems = {
+		top = globalSide ~= "top" and wrap("top"),
+		bottom = globalSide ~= "bottom" and wrap("bottom"),
+		front = globalSide ~= "front" and wrap("front"),
+		back = globalSide ~= "back" and wrap("back"),
+		right = globalSide ~= "right" and wrap("right"),
+		left = globalSide ~= "left" and wrap("left"),
+	}
+
+	for i,v in pairs(modems) do
+		v.open(65535)
+	end
+
 	local event = {}
-	m.open(65535)
 
 	while true do
 		event = {coroutine.yield("modem_message")}

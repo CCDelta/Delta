@@ -3,13 +3,12 @@ local Thread = Delta.lib.Thread
 
 local Gateway = {}
 local Services = {}
-local Processes = {}
+local ipSide = {}
 
-localInterface = Delta.modem(localSide)
 globalInterface = Delta.modem(globalSide)
 
-Services.DHCP = Thread.new(Delta.dofile(path.."DHCP.lua", Delta), localInterface)
-Services.Gateway = Thread.new(Delta.dofile(path.."Gateway.lua", Delta), localInterface, globalInterface)
+Services.DHCP = Thread.new(Delta.dofile(path.."DHCP.lua", Delta), globalSide, ipSide)
+Services.Gateway = Thread.new(Delta.dofile(path.."Gateway.lua", Delta), globalInterface, globalSide, ipSide)
 
 function Gateway.run()
 	Thread.run(Services)

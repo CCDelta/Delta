@@ -11,4 +11,4 @@ local function DHCP(globalInterface, globalSide, ipSide, modems)
 	end
 end
 
-return DHCP
+return DHCP --stuff

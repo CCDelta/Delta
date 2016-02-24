@@ -36,7 +36,7 @@ local function getIP(m, side, mac, timeout)
 	local timer = os.startTimer(timeout or 0.5)
 	repeat
 		event = {os.pullEvent()}
-	until (event[1] == "modem_message" and event[2] == side and event[3] == 65534 and event[4] == 0x1 and type(event[5]) == "table" and event[5][1] == mac) or (event[1] == "timer" and event[2] == timer)
+	until (event[1] == "modem_message" and event[2] == side and event[3] == 65534 and event[4] == 0x0 and type(event[5]) == "table" and event[5][1] == mac) or (event[1] == "timer" and event[2] == timer)
 	os.cancelTimer(timer)
 	m.close(65534)
 	if event[1] == "timer" then

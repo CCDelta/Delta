@@ -20,7 +20,7 @@ local function DHCP(globalSide, ipSide, modems)
 			print("Answering request...")
 			print("New IP: ", base..tostring(moreSig).."."..tostring(lessSig))
 			newIP = base..tostring(moreSig).."."..tostring(lessSig)
-			modems[event[2]].transmit(65534,0x1,{
+			modems[event[2]].transmit(65534,0x0,{
 				[1] = event[5],
 				[2] = newIP
 			})

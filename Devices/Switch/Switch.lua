@@ -61,7 +61,7 @@ local function Switch()
 			side, protocol, req_id, message = event[2], event[3], event[4], event[5]
 			if protocol == 65535 then
 				if not (side == MainSide) then
-					modems[MainSide].transmit(65535, 0x0, message)
+					modems[MainSide].transmit(65535, req_id, message)
 					print("Protocol 65535...")
 					macs[message] = side
 				end
@@ -69,7 +69,7 @@ local function Switch()
 				if side == MainSide then
 					s_side = macs[message[1]]
 					if s_side then
-						modems[s_side].transmit(65534, 0x1, message)
+						modems[s_side].transmit(65534, req_id, message)
 						macs[message[1]] = nil
 						ips[message[2]] = side
 						print("Protocol 65534...")

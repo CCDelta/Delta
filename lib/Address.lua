@@ -12,6 +12,14 @@ function IP.toBinary(str)
 	return toBase(tonumber(one),2,8)..toBase(tonumber(two),2,8)..toBase(tonumber(three),2,8)..toBase(tonumber(four),2,8)
 end
 
+function IP.checkIfValid(addr)
+	local address, port = addr:match("([^:]+):([^:]+)")
+	local one, two, three, four = address:match("([^%.]+)%.([^%.]+)%.([^%.]+)%.([^%.]+)")
+	if tonumber(port) and tonumber(one) and tonumber(two) and tonumber(three) and tonumber(four) then
+		return true
+	end
+end
+
 function IP.new(input)
 	assert(type(input) == "string")
 	if #input == 8 and tonumber("0x"..input) then

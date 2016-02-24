@@ -2,6 +2,9 @@
 	NAT sevice for the gateway.
 ]]--
 
+local Delta = ...
+local isValid = Delta.lib.Address.checkIfValid
+
 local toGlobal = {}
 local toLocal = {}
 
@@ -17,11 +20,23 @@ end
 
 local NAT = {}
 
+print("Loaded NAT")
+
 NAT.toGlobal = toGlobal
 NAT.toLocal = toLocal
 
 function NAT.getLocal(port)
-	return toLocal[checkPort(port)]
+	port = checkPort(port)
+	if not port then
+		return nil, "Not a valid port"
+	return toLocal[port]
+end
+
+function NAT.getGlobal(address)
+	if not isValid(address) then
+		return nil, "Not a valid address"
+	end
+	return toGlobal[address]
 end
 
 return NAT

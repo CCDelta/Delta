@@ -17,22 +17,25 @@ local function wrap(side)
 end
 
 local modems = {
-	top = globalSide ~= "top" and wrap("top"),
-	bottom = globalSide ~= "bottom" and wrap("bottom"),
-	front = globalSide ~= "front" and wrap("front"),
-	back = globalSide ~= "back" and wrap("back"),
-	right = globalSide ~= "right" and wrap("right"),
-	left = globalSide ~= "left" and wrap("left"),
+	top = (globalSide ~= "top" and wrap("top")) or nil,
+	bottom = (globalSide ~= "bottom" and wrap("bottom")) or nil,
+	front = (globalSide ~= "front" and wrap("front")) or nil,
+	back = (globalSide ~= "back" and wrap("back")) or nil,
+	right = (globalSide ~= "right" and wrap("right")) or nil,
+	left = (globalSide ~= "left" and wrap("left")) or nil,
 }
 
 for i,v in pairs(modems) do
+	print(i)
 	v.open(65535)
 end
 
 globalInterface = Delta.modem(globalSide)
 
+local NAT = Delta.dofile(path.."lib/NAT.lua", Delta)
+
 Services.DHCP = Thread.new(Delta.dofile(path.."DHCP.lua", Delta), globalSide, ipSide, modems)
-Services.Gateway = Thread.new(Delta.dofile(path.."Gateway.lua", Delta), globalInterface, globalSide, ipSide, modems)
+Services.Gateway = Thread.new(Delta.dofile(path.."Gateway.lua", Delta), globalInterface, globalSide, ipSide, modems, NAT)
 
 function Gateway.run()
 	Thread.run(Services)

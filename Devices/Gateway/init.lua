@@ -32,9 +32,10 @@ end
 
 globalInterface = Delta.modem(globalSide)
 
-local NAT = Delta.dofile(path.."lib/NAT.lua", Delta)
+local NAT = Delta.dofile(path.."lib/NATlib.lua", Delta)
 
 Services.DHCP = Thread.new(Delta.dofile(path.."DHCP.lua", Delta), globalSide, ipSide, modems)
+Services.NAT = Thread.new(Delta.dofile(path.."NAT.lua", Delta), globalSide, modems, NAT)
 Services.Gateway = Thread.new(Delta.dofile(path.."Gateway.lua", Delta), globalInterface, globalSide, ipSide, modems, NAT)
 
 function Gateway.run()

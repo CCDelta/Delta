@@ -119,6 +119,12 @@ local commands = {
 		if not ok then
 			print(err)
 		end
+	end,
+	mapglobal = function(a)
+		ok, err = modems[main].mapGlobal(a[1],a[2])
+		if not ok then
+			print(err)
+		end
 	end
 }
 

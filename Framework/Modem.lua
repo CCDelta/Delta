@@ -123,6 +123,70 @@ local v = function(SIDE)
 		return true
 	end
 
+	function m.mapLocal(port, address)
+		port = checkPort(port)
+		if not port then
+			return nil, "Not a valid port"
+		end
+		if not isValid(address) then
+			return nil, "Not a valid address"
+		end
+		if toLocal[port] then
+			return nil, "Port is taken"
+		end
+		m.transmit(65535,0x2,{
+			[1] = port,
+			[2] = address
+		})
+		return true
+	end
+	
+	function m.mapGlobal(port, address)
+		port = checkPort(port)
+		if not port then
+			return nil, "Not a valid port"
+		end
+		if not isValid(address) then
+			return nil, "Not a valid address"
+		end
+		m.transmit(65535,0x3,{
+			[1] = port,
+			[2] = address
+		})
+		return true
+	end
+	
+	function m.unMapLocal(port)
+		port = checkPort(port)
+		if not port then
+			return nil, "Not a valid port"
+		end
+		if not isValid(address) then
+			return nil, "Not a valid address"
+		end
+		if toLocal[port] then
+			return nil, "Port is taken"
+		end
+		m.transmit(65535,0x4,{
+			[1] = port
+		})
+		return true
+	end
+	
+	function m.unMapGlobal(address)
+		port = checkPort(port)
+		if not port then
+			return nil, "Not a valid port"
+		end
+		if not isValid(address) then
+			return nil, "Not a valid address"
+		end
+		m.transmit(65535,0x5,{
+			[1] = address
+		})
+		return true
+	end
+
 	return m
 end
 

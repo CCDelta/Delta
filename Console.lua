@@ -113,6 +113,12 @@ local commands = {
 		if main == "" then
 			main = a[1]
 		end
+	end,
+	mapLocal = function(a)
+		ok, err = modems[main].mapLocal(a[1],a[2])
+		if not ok then
+			print(err)
+		end
 	end
 }
 

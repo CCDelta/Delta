@@ -17,13 +17,12 @@ local function DHCP(globalSide, ipSide, modems)
 	while true do
 		event = {coroutine.yield("modem_message")}
 		if event[2] ~= globalSide and event[3] == 65535 and event[4] == 0x0 then
-			print("Answering request...")
-			print("New IP: ", base..tostring(moreSig).."."..tostring(lessSig))
 			newIP = base..tostring(moreSig).."."..tostring(lessSig)
 			modems[event[2]].transmit(65534,0x0,{
 				[1] = event[5],
 				[2] = newIP
 			})
+			print("DHCP: New IP: ", base..tostring(moreSig).."."..tostring(lessSig))
 			ipSide[newIP] = event[2]
 			lessSig = lessSig + 1
 			if lessSig == 256 then

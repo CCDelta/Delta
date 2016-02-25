@@ -45,3 +45,8 @@ IP_PACKET
 		[6] = TTL
 	}
 
+NAT_MAP_LOCAL
+	{
+		[1] = port
+		[2] = address
+	}

@@ -18,24 +18,20 @@ local function NAT(globalSide, modems, NAT)
 		print("NAT: ",event[1])
 		if event[2] ~= globalSide and event[3] == 65535 and type(event[5]) == "table" then
 			if event[4] == 0x2 then --map local
-				port, address = event[5][1], event[5][1]
+				port, address = event[5][1], event[5][2]
 				ok, err = mapLocal(port, address)
 				if not ok then
-					print(err)
+					print("Failed: ", err)
 				else
-					print(ok)
-					print("Port: ", port)
-					print("Address: ", address)
+					print("Requests incoming on port ", port, " will be redirected to IP ", address)
 				end
 			elseif event[4] == 0x3 then --map global
-				port, address = event[5][1], event[5][1]
+				port, address = event[5][1], event[5][2]
 				ok, err = mapGlobal(port, address)
 				if not ok then
-					print(err)
+					print("Failed: ", err)
 				else
-					print(ok)
-					print("Port: ", port)
-					print("Address: ", address)
+					print("Requests incoming from address ", address, " will be redirected to port ", port)
 				end
 			elseif event[4] == 0x4 then --unmap local
 				port = event[5][1]
@@ -43,9 +39,7 @@ local function NAT(globalSide, modems, NAT)
 				if not ok then
 					print(err)
 				else
-					print(ok)
-					print("Port: ", port)
-					print("Address: ", address)
+
 				end
 			elseif event[4] == 0x5 then --unmap global
 				address = event[5][1]
@@ -53,9 +47,7 @@ local function NAT(globalSide, modems, NAT)
 				if not ok then
 					print(err)
 				else
-					print(ok)
-					print("Port: ", port)
-					print("Address: ", address)
+
 				end
 			end
 		end

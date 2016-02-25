@@ -5,6 +5,17 @@
 local Delta = ...
 local SHA = Delta.lib.SHA
 local toBase = Delta.lib.Utils.toBase
+local isValid = Delta.lib.Address.checkIfValid
+
+local function checkPort(p)
+	p = tonumber(p)
+	if not p then return end
+	p = math.floor(p)
+	if p < 0  or p > 65535 then
+		return nil
+	end
+	return p
+end
 
 local function checkMAC(macaddress)
 	if type(macaddress) ~= "string" then
@@ -33,14 +44,14 @@ local function getIP(m, side, mac, timeout)
 	m.open(65534)
 	m.transmit(65535,0x0,mac)
 	local event = {}
-	local timer = os.startTimer(timeout or 0.5)
+	local timer = os.startTimer(timeout or 1)
 	repeat
 		event = {os.pullEvent()}
 	until (event[1] == "modem_message" and event[2] == side and event[3] == 65534 and event[4] == 0x0 and type(event[5]) == "table" and event[5][1] == mac) or (event[1] == "timer" and event[2] == timer)
 	os.cancelTimer(timer)
 	m.close(65534)
 	if event[1] == "timer" then
-		return false
+		return false, "Timer"
 	elseif event[1] == "modem_message" then
 		return event[5][2]
 	end
@@ -131,9 +142,6 @@ local v = function(SIDE)
 		if not isValid(address) then
 			return nil, "Not a valid address"
 		end
-		if toLocal[port] then
-			return nil, "Port is taken"
-		end
 		m.transmit(65535,0x2,{
 			[1] = port,
 			[2] = address
@@ -163,9 +171,6 @@ local v = function(SIDE)
 		end
 		if not isValid(address) then
 			return nil, "Not a valid address"
-		end
-		if toLocal[port] then
-			return nil, "Port is taken"
 		end
 		m.transmit(65535,0x4,{
 			[1] = port

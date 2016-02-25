@@ -8,15 +8,19 @@ local toBase = Delta.lib.Utils.toBase
 local IP = {}
 
 function IP.toBinary(str)
+	str = tostring(str)
 	local one, two, three, four = str:match("([^%.]+)%.([^%.]+)%.([^%.]+)%.([^%.]+)")
 	return toBase(tonumber(one),2,8)..toBase(tonumber(two),2,8)..toBase(tonumber(three),2,8)..toBase(tonumber(four),2,8)
 end
 
 function IP.checkIfValid(addr)
+	addr = tostring(addr)
 	local address, port = addr:match("([^:]+):([^:]+)")
-	local one, two, three, four = address:match("([^%.]+)%.([^%.]+)%.([^%.]+)%.([^%.]+)")
-	if tonumber(port) and tonumber(one) and tonumber(two) and tonumber(three) and tonumber(four) then
-		return true
+	if type(address) == "string" and type(port) == "string" then
+		local one, two, three, four = address:match("([^%.]+)%.([^%.]+)%.([^%.]+)%.([^%.]+)")
+		if tonumber(port) and tonumber(one) and tonumber(two) and tonumber(three) and tonumber(four) then
+			return true
+		end
 	end
 end
 

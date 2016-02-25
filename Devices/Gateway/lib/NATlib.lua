@@ -30,6 +30,7 @@ function NAT.mapLocal(port, address)
 	if not port then
 		return nil, "Not a valid port"
 	end
+	print("Address: ", address)
 	if not isValid(address) then
 		return nil, "Not a valid address"
 	end

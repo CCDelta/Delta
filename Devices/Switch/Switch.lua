@@ -10,6 +10,7 @@ local function wrap(side)
 	if peripheral.isPresent(side) then
 		if peripheral.getType(side) == "modem" then
 			if peripheral.call(side,"isWireless") == false then
+				print("Accepted ", side)
 				return Delta.modem(side)
 			end
 		end
@@ -33,7 +34,7 @@ local function Switch()
 	for i,v in pairs(modems) do
 		istrue = v.connect()
 		if istrue then
-			print(i)
+			print("Is true ", i)
 			MainSide = i
 			MainIP = v.IP
 		end

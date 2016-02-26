@@ -39,7 +39,7 @@ local function NAT(globalSide, modems, NAT)
 				if not ok then
 					print(err)
 				else
-
+					print("Unmapped port ", port)
 				end
 			elseif event[4] == 0x5 then --unmap global
 				address = event[5][1]
@@ -47,7 +47,7 @@ local function NAT(globalSide, modems, NAT)
 				if not ok then
 					print(err)
 				else
-
+					print("Unmapped address ", address)
 				end
 			end
 		end

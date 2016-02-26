@@ -125,6 +125,18 @@ local commands = {
 		if not ok then
 			print(err)
 		end
+	end,
+	unmaplocal = function(a)
+		ok, err = modems[main].unMapLocal(a[1])
+		if not ok then
+			print(err)
+		end
+	end,
+	unmapglobal = function(a)
+		ok, err = modems[main].unMapGlobal(a[1])
+		if not ok then
+			print(err)
+		end
 	end
 }
 

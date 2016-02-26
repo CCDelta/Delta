@@ -125,7 +125,6 @@ local v = function(SIDE)
 	function m.connect(timeout)
 		IP = getIP(m, SIDE, MAC, timeout)
 		m.IP = IP
-		print("IP ", IP)
 		if IP then 
 			return true 
 		else 
@@ -139,32 +138,34 @@ local v = function(SIDE)
 		return true
 	end
 
-	function m.mapLocal(port, address)
-		port = checkPort(port)
-		if not port then
-			return nil, "Not a valid port"
+	function m.mapLocal(gatewayPort, localPort)
+		gatewayPort = checkPort(gatewayPort)
+		localPort = checkPort(localPort)
+		if not gatewayPort then
+			return nil, "Not a valid port (gateway)"
 		end
-		if not isValid(address) then
-			return nil, "Not a valid address"
+		if not localPort then
+			return nil, "Not a valid port (local)"
 		end
 		m.transmit(65535,0x2,{
-			[1] = port,
-			[2] = address
+			[1] = gatewayPort,
+			[2] = IP..":"..tostring(localPort)
 		})
 		return true
 	end
 	
-	function m.mapGlobal(port, address)
-		port = checkPort(port)
-		if not port then
-			return nil, "Not a valid port"
+	function m.mapGlobal(gatewayPort, localPort)
+		gatewayPort = checkPort(gatewayPort)
+		localPort = checkPort(localPort)
+		if not gatewayPort then
+			return nil, "Not a valid port (gateway)"
 		end
-		if not isValid(address) then
-			return nil, "Not a valid address"
+		if not localPort then
+			return nil, "Not a valid port (local)"
 		end
 		m.transmit(65535,0x3,{
-			[1] = port,
-			[2] = address
+			[1] = gatewayPort,
+			[2] = IP..":"..tostring(localPort)
 		})
 		return true
 	end
@@ -180,12 +181,13 @@ local v = function(SIDE)
 		return true
 	end
 	
-	function m.unMapGlobal(address)
-		if not isValid(address) then
-			return nil, "Not a valid address"
+	function m.unMapGlobal(port)
+		port = checkPort(port)
+		if not port then
+			return nil, "Not a valid port"
 		end
 		m.transmit(65535,0x5,{
-			[1] = address
+			[1] = IP..":"..tostring(port)
 		})
 		return true
 	end

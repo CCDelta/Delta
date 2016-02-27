@@ -18,7 +18,7 @@ local Delta = dofile(path.."/init.lua", path)
 local permissions = {
 	list(string path) 	table fil
 	exists(string path) 	boolean e
-	isDir(string path) 	boolean i
+	isDir
 	isReadOnly
 	getName
 	getDrive

@@ -23,6 +23,6 @@ for token in data:gmatch("[^\n]+") do
 	datas[#datas+1] = token
 end
 
-local Delta = dofile("disk/Delta/init.lua", datas[1])
+local Delta = dofile(datas[1].."/init.lua", datas[1])
 local Gateway = Delta.loadDevice("Gateway", datas[2], datas[3])
 Gateway.run()

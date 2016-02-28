@@ -91,7 +91,7 @@ local v = function(SIDE)
 		return true
 	end
 
-	function m.receive()
+	function m.receive(filter)
 		--[[{
 			[1] = Destination IP
 			[2] = Sender IP
@@ -101,7 +101,7 @@ local v = function(SIDE)
 			[6] = TTL
 		}]]--
 
-		local event = {coroutine.yield()}
+		local event = {coroutine.yield(filter)}
 		if event[1] ~= "modem_message" then
 			print(event[1])
 			return false, event

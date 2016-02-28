@@ -1,6 +1,6 @@
 local Delta = ...
-local BigNum = Delta.BigNum
-local doDebug
+local BigNum = Delta.lib.BigNum
+local doDebug = false
 
 local round = function(n)
 	if not n then print(n) error("",2) end
@@ -32,39 +32,42 @@ local function debugPrint(...)
 	end
 end
 
-function connect(modem, AUTH_CHANNEL, dist, debugArg)
+function connect(modem, IP, dest_port, sender_port)
+	print(BigNum)
 	local prime = BigNum.new("625210769")
 	local base = BigNum.new("11")
 	local secret = BigNum.new(math.random(1,800))
 	local event = {}
-	local PING_PORT = 1
-	local KEY_EXCHANGE_PORT = 2
 	local order
 	local _, mySecret = BigNum.mt.div((base^secret),prime)
 	local hisSecret
-	local dist = dist
-	doDebug = debugArg
 	
 	debugPrint("Loaded everything...")
 
-	modem.open(AUTH_CHANNEL)
-	modem.transmit(AUTH_CHANNEL,PING_PORT,"ping")
+	modem.send(IP, dest_port, sender_port,"ping")
 
 	debugPrint("Sent ping message...")
+
+	--[[{
+		[1] = Destination IP
+		[2] = Sender IP
+		[3] = Destination Port
+		[4] = Sender Port
+		[5] = Message
+		[6] = TTL
+	}]]--
 	
 	while true do
-		event = generateEvent(os.pullEvent())
+		event = modem.receive("modem_message")
 		debugPrint("One more iteration...")
 		--event, side, frequency, replyFrequency, message, distance
-		if event[1] == "modem_message" and event[4] == PING_PORT then
-			if event[5] == "ping" and event[3] == AUTH_CHANNEL and event[4] == PING_PORT then
+		if event and event[1] == modem.IP and event[2] == IP and event[3] == sender_port and event[4] == dest_port then
+			if event[5] == "ping" then
 				order = 2
-				modem.transmit(AUTH_CHANNEL,1,"pong")
-				distance = event[6]
+				modem.send(IP, dest_port, sender_port,"pong")
 				break
-			elseif event[5] == "pong" and event[3] == AUTH_CHANNEL and event[4] == PING_PORT then
+			elseif event[5] == "pong" then
 				order = 1
-				distance = event[6]
 				break
 			end
 		end
@@ -75,20 +78,20 @@ function connect(modem, AUTH_CHANNEL, dist, debugArg)
 	event = {}
 
 	if order == 1 then
-		modem.transmit(AUTH_CHANNEL,KEY_EXCHANGE_PORT,mySecret)
+		modem.send(IP, dest_port, sender_port, mySecret)
 		debugPrint("Sent my secret...")
 		repeat
-			event = generateEvent(os.pullEvent())
-			debugPrint("Got an event: ", textutils.serialize(event))
-		until event[1] == "modem_message" and event[3] == AUTH_CHANNEL and event[4] == KEY_EXCHANGE_PORT and checkDist(dist,event)
+			event = modem.receive("modem_message")
+			debugPrint("Got an event: ", pcall(textutils.serialize, event))
+		until event and event[1] == modem.IP and event[2] == IP and event[3] == sender_port and event[4] == dest_port
 		hisSecret = event[5]
 	elseif order == 2 then
 		repeat
-			event = generateEvent(os.pullEvent())
-			debugPrint("Got an event: ", textutils.serialize(event))
-		until event[1] == "modem_message" and event[3] == AUTH_CHANNEL and event[4] == KEY_EXCHANGE_PORT and checkDist(dist,event)
+			event = modem.receive("modem_message")
+			debugPrint("Got an event: ", pcall(textutils.serialize, event))
+		until event and event[1] == modem.IP and event[2] == IP and event[3] == sender_port and event[4] == dest_port
 		hisSecret = event[5]
-		modem.transmit(AUTH_CHANNEL,KEY_EXCHANGE_PORT,mySecret)
+		modem.send(IP, dest_port, sender_port, mySecret)
 		debugPrint("Sent my secret...")
 	end
 	os.queueEvent("A BigNum event")
@@ -102,4 +105,4 @@ function connect(modem, AUTH_CHANNEL, dist, debugArg)
 	return v, order
 end
 
-return {connect = connect}
+return connect

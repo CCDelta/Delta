@@ -137,6 +137,16 @@ local commands = {
 		if not ok then
 			print(err)
 		end
+	end,
+	dh = function(a)
+		local res
+		if modems[main] then
+			print("Sending..")
+			res = Delta.lib.DH(modems[main],a[1],255,255)
+			print("Res ", res)
+		else
+			print("No modem!")
+		end
 	end
 }
 

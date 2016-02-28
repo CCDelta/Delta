@@ -27,7 +27,6 @@
    RADIX = 10^7 ;
    RADIX_LEN = math.floor( math.log10 ( RADIX ) ) ;
 
-
 --%%%%%%%%        Start of Code        %%%%%%%%--
 
 local BigNum = {} ;

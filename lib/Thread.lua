@@ -37,12 +37,15 @@ function thread.new(func, ...)
 	return self
 end
 
-function thread.run(t)
+function thread.run(t, func)
 	local event = {}
 	while true do
 		event = {os.pullEvent()}
 		for i,v in pairs(t) do
 			v.resume(unpack(event))
+		end
+		if func then
+			func()
 		end
 	end
 end

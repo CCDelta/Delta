@@ -90,7 +90,7 @@ local function digestblock(data, i, C)
 	return C
 end
 
-local function sha256(data)
+return function (data)
 	data = data or ""
 	data = type(data) == "string" and {data:byte(1,-1)} or data
 

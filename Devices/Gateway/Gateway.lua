@@ -25,7 +25,7 @@ local function Gateway(globalInterface, globalSide, ipSide, modems, NAT)
 
 			else
 				dSide = ipSide[destIP]
-				if dSide then
+				if dSide and not (event[2] == dSide) then
 					IPpacket[6] = IPpacket[6]-1
 					if modems[dSide] then
 						modems[dSide].transmit(64511, 0x0, IPpacket)

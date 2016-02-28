@@ -126,7 +126,7 @@ local v = function(SIDE)
 		IP = getIP(m, SIDE, MAC, timeout)
 		m.IP = IP
 		if IP then 
-			return true 
+			return true, IP
 		else 
 			return false 
 		end

@@ -82,15 +82,20 @@ local function loadSettings()
 		file.close()
 		port, connectionPort = portsData:match("([^\n]+)[\n]([^\n]+)")
 		port = tonumber(port) or 20
+		print("Port: ", port)
 		connectionPort = tonumber(connectionPort) or 21
+		print("Got ports")
 	else
-
+		port = 20
+		connectionPort = 21
 	end
 end
 
 loadSettings()
 
+print("Getting modem")
 local modem = Delta.modem(side)
+print("IP: ", modem.connect())
 
 local function setUpConnection(...)
 	local id, IP, dest_port = ...
@@ -100,11 +105,12 @@ end
 local connections = {}
 
 local actions = {
-	connect = function(a)
-		
+	connect = function(ip, client_port, msg)
+		print(ip)
 	end
 }
 
+print("Loaded things")
 --[[IP_PACKET
 	{
 		[1] = Destination IP
@@ -120,11 +126,22 @@ local function main()
 	local action, user, pass, arguments
 	while true do
 		event, dummy = modem.receive(true)
+		print("Main: got event")
+		--[[if event then
+			print(event[1])
+			print(event[2])
+			print(event[3], event[3] == port, type(port), type(event[3]), port)
+			print(event[4])
+			print(event[5])
+		end]]
 		if event and event[3] == port and type(event[5]) == "table" then
+			print("Match 1")
+			action = event[5][1]
 			if actions[action] then
-
+				print("Does exist")
+				actions[action](event[2], event[4], event[5])
 			else
-
+				print("No such action")
 			end
 		end
 	end
@@ -138,7 +155,13 @@ local function clean()
 	end
 end
 
+print("Loaded more stuff")
+
 processes.main = Thread.new(main)
+
+for i,v in pairs(processes) do
+	print("wow",i)
+end
 
 Thread.run(processes, clean)
 

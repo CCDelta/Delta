@@ -16,9 +16,16 @@ local FTP = function(modem, ip, dest_port, send_port)
 
 	local self = {}
 
-	self.connect = function()
-		key = SHA(tostring(DH(modem, ip, dest_port, send_port)))
-		enc_pass = AES.encryptBytes(key, pass)
+	self.sendCommand = function (msg)
+		modem.send(ip, dest_port, send_port, msg)
+	end
+
+	self.connect = function(user, pass)
+		self.sendCommand({
+			[1] = "connect"
+		})
+		--key = SHA(tostring(DH(modem, ip, dest_port, send_port)))
+		--enc_pass = AES.encryptBytes(key, pass)
 	end
 
 	self.list = function(path)
@@ -58,22 +65,6 @@ local FTP = function(modem, ip, dest_port, send_port)
 	end
 
 	self.delete = function(path)
-
-	end
-
-	self.combine = function(path)
-
-	end
-
-	self.open = function(path)
-
-	end
-
-	self.find = function(path)
-
-	end
-
-	self.getDir = function(path)
 
 	end
 	

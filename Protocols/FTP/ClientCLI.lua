@@ -2,6 +2,8 @@
 	Client CLI
 ]]--
 
+local path = ...
+
 dofile = function(path,...)
 	local f, err = loadfile(path)
 	if not f then
@@ -25,4 +27,11 @@ local dest_port = tonumber(read())
 term.write("Input send port: ")
 local send_port = tonumber(read())
 
-local connection = FTP(IP, dest_port, send_port)
+term.write("Input modem side: ")
+local side = read()
+local modem = Delta.modem(side)
+modem.connect()
+
+local connection = FTP(modem, IP, dest_port, send_port)
+
+connection.connect()

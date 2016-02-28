@@ -101,7 +101,7 @@ local v = function(SIDE)
 			[6] = TTL
 		}]]--
 
-		local event = {coroutine.yield(filter)}
+		local event = {coroutine.yield(filter and "modem_message")}
 		if event[1] ~= "modem_message" then
 			print(event[1])
 			return false, event

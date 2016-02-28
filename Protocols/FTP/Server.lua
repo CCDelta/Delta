@@ -15,9 +15,10 @@ end
 
 local Delta = dofile(path.."/init.lua", path)
 local Thread = Delta.lib.Thread
+local DH = Delta.lib.DH
 local helper = {}
 local processes = {}
-local side
+local side, port, connectionPort
 
 local permissions = {
 	list = "admin",
@@ -61,17 +62,40 @@ local function loadSettings()
 		local file = fs.open(".ftp/side", "r")
 		side = file.readAll()
 		file.close()
+		print("Side")
 		print(side)
 	else
+		print("Side")
 		for i,v in pairs(rs.getSides()) do
 			if peripheral.getType(v) == "modem" then
 				side = v
+				print(side)
 			end
 		end
+		if side == nil then
+			error("No modem found!")
+		end
+	end
+	if fs.exists(".ftp/ports") then
+		local file = fs.open(".ftp/side", "r")
+		local portsData = file.readAll()
+		file.close()
+		port, connectionPort = portsData:match("([^\n]+)[\n]([^\n]+)")
+		port = tonumber(port) or 20
+		connectionPort = tonumber(connectionPort) or 21
+	else
+
 	end
 end
 
 loadSettings()
+
+local modem = Delta.modem(side)
+
+local function setUpConnection(...)
+	local id, IP, dest_port = ...
+	DH(modem, IP, dest_port, connectionPort)
+end
 
 local connections = {}
 
@@ -81,18 +105,41 @@ local actions = {
 	end
 }
 
-local function main()
-	coroutine.yield()
-	local event = {}
-	while true do
+--[[IP_PACKET
+	{
+		[1] = Destination IP
+		[2] = Sender IP
+		[3] = Destination Port
+		[4] = Sender Port
+		[5] = Message
+		[6] = TTL
+	}]]
 
+local function main()
+	local event = {}
+	local action, user, pass, arguments
+	while true do
+		event, dummy = modem.receive(true)
+		if event and event[3] == port and type(event[5]) == "table" then
+			if actions[action] then
+
+			else
+
+			end
+		end
 	end
 end
 
 local function clean()
-
+	for i,v in pairs(helper) do
+		if v == "done" and type(i) == "number" then
+			processes[i] = nil
+		end
+	end
 end
 
 processes.main = Thread.new(main)
+
+Thread.run(processes, clean)
 
 
